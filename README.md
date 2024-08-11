@@ -1,55 +1,60 @@
-Complete Setup Guide for THA Core and Scripts
-Step 1: Install THA Core and Dependencies
-Install Python and Git:
+***Complete Setup Guide for THA Core and Scripts***
+
+#Step 1: Install THA Core and Dependencies
+***Install Python and Git:***
 Ensure Python and Git are installed on your system:
 
-bash
-Copy code
+
+```
 sudo apt update
 sudo apt install python3 python3-pip git
-Clone THA Core Repository:
+```
+***Clone THA Core Repository:***
 Use Git to clone the THA Core repository from GitHub:
 
-bash
-Copy code
+`bash`
+```
 gh repo clone nucash-mining/tha-mining
 cd tha-mining
-Build and Install THA Core:
+```
+*** Build and Install THA Core:***
 Follow the installation instructions provided in the repository, typically involving configuration and compilation:
 
-bash
-Copy code
+`bash`
+```
 ./configure
 make
 sudo make install
-Step 2: Set Up SEND and RECEIVE Wallets
+```
+# Step 2: Set Up SEND and RECEIVE Wallets
 Initialize the THA Core Daemon:
 Start the THA Core daemon to interact with the blockchain:
 
-bash
-Copy code
+`bash`
+```
 thad -daemon
-Create SEND and RECEIVE Wallets:
+```
+***Create SEND and RECEIVE Wallets:***
 If THA Core does not automatically create default wallets, create them manually:
 
-bash
-Copy code
+```
 tha-cli createwallet "SEND"
 tha-cli createwallet "RECEIVE"
-Generate Wallet Addresses:
+```
+***Generate Wallet Addresses:***
 Generate new addresses for both wallets to use for transactions:
 
-bash
-Copy code
+```
 send_address=$(tha-cli -rpcwallet=SEND getnewaddress)
 receive_address=$(tha-cli -rpcwallet=RECEIVE getnewaddress)
 echo "SEND Wallet Address: $send_address"
 echo "RECEIVE Wallet Address: $receive_address"
-Set up the Python script to monitor transactions:
+```
+***Set up the Python script to monitor transactions:***
 Deploy a Python script (TransactionListener.py) that listens for incoming transactions and waits for one confirmation. This script should be ready in the directory from which you are running the commands.
 
-python
-Copy code
+`python`
+```
 import requests
 import json
 import time
@@ -92,18 +97,26 @@ if __name__ == '__main__':
             time.sleep(60)  # Wait for a minute before checking again
     except Exception as e:
         print(f"An error occurred: {e}")
-Step 3: Deploy Script to Send First Transaction & Deploy Transaction Confirmation Trigger and Re-director Scripts
-Send THA from SEND to RECEIVE wallet:
-Send 0.1 THA plus fees:
+```
+# Step 3: Deploy Script to Send First Transaction & Deploy Transaction Confirmation Trigger and Re-director Scripts
+***Send THA from SEND to RECEIVE wallet:***
 
-bash
-Copy code
+`bash`
+```
+Send 0.1 THA plus fees:
+```
+
+`bash`
+```
 tha-cli -rpcwallet=SEND sendtoaddress "$receive_address" 0.1 "" "" false true 0.0001 SUBTRACTFEEFROMAMOUNT
-Deploy a script to send THA to the recipient address:
+```
+
+***Deploy a script to send THA to the recipient address:***
 Save this script as SendTHATransaction.py:
 
-python
-Copy code
+`python`
+
+```
 import requests
 import json
 
@@ -140,11 +153,13 @@ if __name__ == '__main__':
 
     except Exception as e:
         print(f"An error occurred: {e}")
-Deploy Block Reward Confirmation Trigger BlockRewardConfirmationTrigger.py:
+```
+
+***Deploy Block Reward Confirmation Trigger BlockRewardConfirmationTrigger.py:***
 Save this script in your project directory:
 
-python
-Copy code
+`python`
+```
 import requests
 import json
 import time
@@ -194,11 +209,13 @@ if __name__ == '__main__':
             time.sleep(60)
     except Exception as e:
         print(f"An error occurred: {e}")
-Deploy Mining Reward Redirector Script:
+```
+
+***Deploy Mining Reward Redirector Script:***
 Save this script as MiningRewardRedirector.py:
 
-python
-Copy code
+`python`
+```
 import requests
 import json
 import time
@@ -247,15 +264,18 @@ if __name__ == '__main__':
             time.sleep(60)
     except Exception as e:
         print(f"An error occurred: {e}")
-Step 4: Automate Execution with a Bash Script
+```
+
+***Step 4: Automate Execution with a Bash Script***
 Create a bash script to automate the setup and run the listener:
 Create a file named setup_and_monitor.sh and include the following content:
 
-bash
-Copy code
+`bash`
+```
 #!/bin/bash
 
 # Install Python and Git
+
 sudo apt update
 sudo apt install -y python3 python3-pip git
 
@@ -284,23 +304,27 @@ echo "RECEIVE Wallet Address: $receive_address" >> wallet_addresses.txt
 # Run the transaction listener script
 python3 TransactionListener.py
 Make the script executable:
+```
 
-bash
-Copy code
+`bash`
+```
 chmod +x setup_and_monitor.sh
 Run the setup script:
+```
 
-bash
-Copy code
+`bash`
+```
 ./setup_and_monitor.sh
-Step 5: Document Everything
+```
+
+***Step 5: Document Everything***
 Prepare a README.md:
 Document each step, the purpose of each script, and how to run them. Include troubleshooting tips and configuration options.
 
 Example content for README.md:
 
-markdown
-Copy code
+`markdown`
+```
 # THA Mining and Transaction Automation Scripts
 
 This repository contains a collection of scripts designed to automate various tasks related to THA cryptocurrency operations, such as monitoring wallets for new block rewards and automating transactions.
@@ -317,39 +341,53 @@ This repository contains a collection of scripts designed to automate various ta
 - **MiningRewardRedirector.py**
   - **Purpose**: Monitors the RECEIVE wallet for new block rewards and forwards them to a specific address.
   - **Usage**:
-    ```bash
-    python3 MiningRewardRedirector.py
-    ```
+```
+
+`bash`
+```
+python3 MiningRewardRedirector.py
+```
 
 - **BlockRewardConfirmationTrigger.py**
   - **Purpose**: Listens for incoming transactions of newly mined coins to the SEND wallet and triggers a batch transaction process.
   - **Usage**:
-    ```bash
-    python3 BlockRewardConfirmationTrigger.py
-    ```
+
+`bash`
+```
+python3 BlockRewardConfirmationTrigger.py
+```
+
 
 ### Transaction Scripts
 
 - **SendTHATransaction.py**
   - **Purpose**: Sends 0.1 THA to the recipient address.
   - **Usage**:
-    ```bash
-    python3 SendTHATransaction.py
-    ```
+`bash`
+
+```
+python3 SendTHATransaction.py
+```
 
 - **TransactionListener.py**
   - **Purpose**: Listens for incoming transactions to the SEND wallet and waits for one confirmation.
   - **Usage**:
-    ```bash
-    python3 TransactionListener.py
-    ```
+```
+`bash`
+   
+```
+python3 TransactionListener.py
+```
 
 ## Setup
 
 1. Ensure Python 3.x is installed on your system.
 2. Install required Python packages:
-   ```bash
-   pip install requests
+   `bash`
+
+```
+pip install requests
+```
 Configure your THA node settings in each script as needed, especially the RPC user, password, and wallet names.
 Contributing
 Feel free to fork this repository and submit pull requests to contribute to the development of these automation scripts. For major changes, please open an issue first to discuss what you would like to change.
