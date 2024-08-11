@@ -309,8 +309,8 @@ Make the script executable:
 `bash`
 ```
 chmod +x setup_and_monitor.sh
-Run the setup script:
 ```
+Run the setup script:
 
 `bash`
 ```
@@ -372,9 +372,8 @@ python3 SendTHATransaction.py
 - **TransactionListener.py**
   - **Purpose**: Listens for incoming transactions to the SEND wallet and waits for one confirmation.
   - **Usage**:
-```
+  - 
 `bash`
-   
 ```
 python3 TransactionListener.py
 ```
@@ -383,11 +382,12 @@ python3 TransactionListener.py
 
 1. Ensure Python 3.x is installed on your system.
 2. Install required Python packages:
-   `bash`
 
+`bash`
 ```
 pip install requests
 ```
+
 Configure your THA node settings in each script as needed, especially the RPC user, password, and wallet names.
 Contributing
 Feel free to fork this repository and submit pull requests to contribute to the development of these automation scripts. For major changes, please open an issue first to discuss what you would like to change.
@@ -395,5 +395,4 @@ Feel free to fork this repository and submit pull requests to contribute to the 
 License
 MIT
 
-Copy code
 This revised guide includes all the required steps and integrates each of the scripts you mentioned. Each step is designed to be clear and executable, making the entire process straightforward for users.
